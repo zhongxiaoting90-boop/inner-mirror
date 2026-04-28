@@ -12,26 +12,21 @@ export default async function handler(req, res) {
   try {
     const { messages, system } = req.body;
 
-    const contents = [];
-    for (const m of messages) {
-      contents.push({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      });
-    }
-
-    const body = {
-      system_instruction: { parts: [{ text: system }] },
-      contents,
-      generationConfig: { maxOutputTokens: 800 }
-    };
+    const contents = messages.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: system }] },
+          contents,
+          generationConfig: { maxOutputTokens: 800 }
+        })
       }
     );
 
@@ -43,11 +38,11 @@ export default async function handler(req, res) {
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) {
-      return res.status(200).json({ content: [{ type: 'text', text: 'NO_TEXT:' + JSON.stringify(data).slice(0, 200) }] });
+      return res.status(200).json({ content: [{ type: 'text', text: 'NO_TEXT: ' + JSON.stringify(data).slice(0, 300) }] });
     }
 
     return res.status(200).json({ content: [{ type: 'text', text }] });
   } catch (error) {
-    return res.status(200).json({ content: [{ type: 'text', text: 'CATCH:' + error.message }] });
+    return res.status(200).json({ content: [{ type: 'text', text: 'CATCH: ' + error.message }] });
   }
 }
