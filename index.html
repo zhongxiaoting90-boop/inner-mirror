@@ -6,283 +6,137 @@
 <title>内在镜子 · 乔宝专属教练</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #222;
-    --border: #2a2a2a;
-    --border2: #333;
-    --text: #e8e4dc;
-    --text2: #8a8580;
-    --text3: #555;
-    --gold: #c9a96e;
-    --gold2: #e8c98a;
-    --teal: #5bbfaa;
-    --red: #c97070;
-    --amber: #d4956a;
-    --radius: 12px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans SC', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Header */
-  .header {
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .logo-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 8px var(--gold);
-  }
-  .header-title {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 16px;
-    color: var(--gold);
-    letter-spacing: 2px;
-  }
-  .header-sub { font-size: 11px; color: var(--text3); letter-spacing: 1px; }
-  .reminder-btn {
-    font-size: 12px; color: var(--text2);
-    background: var(--surface); border: 1px solid var(--border2);
-    border-radius: 20px; padding: 5px 12px; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .reminder-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-  /* Mode tabs */
-  .tabs {
-    display: flex; gap: 6px;
-    padding: 12px 24px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .tab {
-    padding: 5px 16px; border-radius: 20px;
-    border: 1px solid var(--border2); font-size: 13px;
-    cursor: pointer; background: transparent; color: var(--text2);
-    transition: all 0.2s; font-family: inherit;
-  }
-  .tab.on {
-    background: var(--surface2); color: var(--text);
-    border-color: var(--border2);
-  }
-  .tab:hover { border-color: var(--text3); }
-
-  /* Memory bar */
-  .mem-bar {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 24px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .mem-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--text3); flex-shrink: 0;
-    transition: background 0.3s;
-  }
-  .mem-dot.active { background: var(--teal); box-shadow: 0 0 6px var(--teal); }
-  .mem-txt { font-size: 12px; color: var(--text3); flex: 1; }
-  .export-btn {
-    font-size: 11px; color: var(--text3);
-    background: transparent; border: 1px solid var(--border);
-    border-radius: 10px; padding: 3px 8px; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .export-btn:hover { border-color: var(--text3); color: var(--text2); }
-
-  /* Review card */
-  .review-card {
-    margin: 12px 24px 0;
-    padding: 12px 16px;
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    display: none;
-  }
-  .review-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; letter-spacing: 1px; }
-  .review-q { font-size: 14px; color: var(--text); line-height: 1.6; }
-
-  /* Chat area */
-  .chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-height: 0;
-  }
-  .chat::-webkit-scrollbar { width: 4px; }
-  .chat::-webkit-scrollbar-track { background: transparent; }
-  .chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-  .msg {
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    font-size: 14px;
-    line-height: 1.75;
-    max-width: 88%;
-    white-space: pre-wrap;
-    animation: fadeIn 0.25s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
-  .msg.ai {
-    background: var(--surface);
-    color: var(--text);
-    align-self: flex-start;
-    border: 1px solid var(--border2);
-  }
-  .msg.user {
-    background: #1e2a1e;
-    color: #a8d4a8;
-    align-self: flex-end;
-    border: 1px solid #2a3a2a;
-  }
-  .msg.sys {
-    background: transparent;
-    color: var(--text3);
-    font-size: 11px;
-    text-align: center;
-    align-self: center;
-    max-width: 100%;
-    padding: 2px 0;
-    letter-spacing: 1px;
-    border: none;
-  }
-  .badge {
-    display: inline-block;
-    margin-top: 8px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-  .b-inner { background: #1a2535; color: #6b9fd4; border: 1px solid #2a3f5a; }
-  .b-biz { background: #2a1f10; color: var(--amber); border: 1px solid #3a2f1a; }
-  .b-root { background: #2a1515; color: var(--red); border: 1px solid #3a2525; }
-
-  /* Typing indicator */
-  .typing { display: flex; gap: 4px; align-items: center; padding: 14px 16px; }
-  .typing span {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--text3); animation: bounce 1.2s infinite;
-  }
-  .typing span:nth-child(2) { animation-delay: 0.2s; }
-  .typing span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes bounce {
-    0%,60%,100% { transform: translateY(0); }
-    30% { transform: translateY(-5px); }
-  }
-
-  /* Input area */
-  .input-area {
-    padding: 12px 24px 20px;
-    border-top: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .input-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 10px; }
-  textarea {
-    flex: 1; min-height: 46px; max-height: 120px;
-    resize: none; padding: 12px 14px;
-    font-size: 14px; font-family: inherit; font-weight: 300;
-    border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    background: var(--surface);
-    color: var(--text);
-    line-height: 1.5;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  textarea:focus { border-color: var(--gold); }
-  textarea::placeholder { color: var(--text3); }
-  .send-btn {
-    padding: 0 20px; height: 46px;
-    border-radius: var(--radius);
-    border: 1px solid var(--gold);
-    background: transparent; color: var(--gold);
-    font-size: 14px; font-family: inherit;
-    cursor: pointer; white-space: nowrap;
-    transition: all 0.2s;
-  }
-  .send-btn:hover { background: var(--gold); color: var(--bg); }
-  .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-  .quick { display: flex; gap: 6px; flex-wrap: wrap; }
-  .qbtn {
-    font-size: 12px; color: var(--text2);
-    background: transparent;
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 4px 12px; cursor: pointer;
-    transition: all 0.2s; font-family: inherit;
-  }
-  .qbtn:hover { border-color: var(--gold); color: var(--gold); }
-
-  /* Reminder modal */
-  .modal-bg {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7); z-index: 100;
-    align-items: center; justify-content: center;
-  }
-  .modal-bg.show { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border2);
-    border-radius: 16px; padding: 24px; width: 320px;
-    animation: fadeIn 0.2s ease;
-  }
-  .modal h3 {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 16px; color: var(--gold);
-    margin-bottom: 16px; font-weight: 600;
-  }
-  .modal label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 6px; }
-  .modal input[type="time"] {
-    width: 100%; padding: 10px 12px;
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 8px; color: var(--text); font-size: 14px;
-    font-family: inherit; outline: none; margin-bottom: 16px;
-  }
-  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
-  .modal-cancel {
-    padding: 8px 16px; border-radius: 8px;
-    border: 1px solid var(--border2); background: transparent;
-    color: var(--text2); font-size: 13px; cursor: pointer;
-    font-family: inherit;
-  }
-  .modal-save {
-    padding: 8px 16px; border-radius: 8px;
-    border: 1px solid var(--gold); background: transparent;
-    color: var(--gold); font-size: 13px; cursor: pointer;
-    font-family: inherit; transition: all 0.2s;
-  }
-  .modal-save:hover { background: var(--gold); color: var(--bg); }
-  .reminder-status { font-size: 12px; color: var(--teal); margin-top: 4px; min-height: 18px; }
-
-  /* Export box */
-  .export-area {
-    display: none; margin: 0 24px 12px;
-    padding: 12px; background: var(--surface2);
-    border-radius: var(--radius); border: 1px solid var(--border2);
-    font-size: 12px; color: var(--text2);
-    white-space: pre-wrap; max-height: 200px; overflow-y: auto;
-  }
+:root {
+  --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #222;
+  --border: #2a2a2a; --border2: #333;
+  --text: #e8e4dc; --text2: #8a8580; --text3: #555;
+  --gold: #c9a96e; --teal: #5bbfaa; --red: #c97070; --amber: #d4956a;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif; font-weight: 300;
+  display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+}
+.header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.header-left { display: flex; align-items: center; gap: 10px; }
+.logo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+.header-title { font-family: 'Noto Serif SC', serif; font-size: 15px; color: var(--gold); letter-spacing: 2px; }
+.header-sub { font-size: 11px; color: var(--text3); letter-spacing: 1px; }
+.reminder-btn {
+  font-size: 12px; color: var(--text2); background: var(--surface);
+  border: 1px solid var(--border2); border-radius: 20px; padding: 5px 12px; cursor: pointer;
+}
+.reminder-btn:hover { border-color: var(--gold); color: var(--gold); }
+.tabs {
+  display: flex; gap: 6px; padding: 10px 20px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.tab {
+  padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border2);
+  font-size: 13px; cursor: pointer; background: transparent; color: var(--text2);
+  font-family: inherit; transition: all 0.2s;
+}
+.tab.on { background: var(--surface2); color: var(--text); }
+.mem-bar {
+  display: flex; align-items: center; gap: 8px; padding: 7px 20px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.mem-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); transition: all 0.3s; flex-shrink: 0; }
+.mem-dot.on { background: var(--teal); box-shadow: 0 0 5px var(--teal); }
+.mem-txt { font-size: 12px; color: var(--text3); flex: 1; }
+.exp-btn {
+  font-size: 11px; color: var(--text3); background: transparent;
+  border: 1px solid var(--border); border-radius: 10px; padding: 2px 8px; cursor: pointer;
+}
+.exp-btn:hover { color: var(--text2); border-color: var(--text3); }
+.review-card {
+  margin: 10px 20px 0; padding: 12px 16px; background: var(--surface);
+  border-radius: var(--radius); border: 1px solid var(--border2); display: none;
+}
+.review-label { font-size: 11px; color: var(--text3); margin-bottom: 5px; letter-spacing: 1px; }
+.review-q { font-size: 14px; color: var(--text); line-height: 1.6; }
+.chat {
+  flex: 1; overflow-y: auto; padding: 14px 20px;
+  display: flex; flex-direction: column; gap: 10px; min-height: 0;
+}
+.chat::-webkit-scrollbar { width: 3px; }
+.chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.msg {
+  padding: 11px 15px; border-radius: var(--radius);
+  font-size: 14px; line-height: 1.75; max-width: 90%;
+  white-space: pre-wrap; animation: fadeUp 0.2s ease;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+.msg.ai { background: var(--surface); color: var(--text); align-self: flex-start; border: 1px solid var(--border2); }
+.msg.user { background: #1a2a1a; color: #9fd09f; align-self: flex-end; border: 1px solid #253525; }
+.msg.sys { background: none; color: var(--text3); font-size: 11px; text-align: center; align-self: center; max-width: 100%; padding: 2px 0; border: none; letter-spacing: 1px; }
+.badge { display: inline-block; margin-top: 7px; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+.b-i { background: #1a2535; color: #6b9fd4; border: 1px solid #2a3f5a; }
+.b-b { background: #2a1f10; color: var(--amber); border: 1px solid #3a2f1a; }
+.b-r { background: #2a1515; color: var(--red); border: 1px solid #3a2525; }
+.typing-dots { display: flex; gap: 4px; align-items: center; padding: 14px 15px; }
+.typing-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); animation: bounce 1.2s infinite; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+.input-area { padding: 10px 20px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.input-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 8px; }
+textarea {
+  flex: 1; min-height: 44px; max-height: 110px; resize: none;
+  padding: 11px 13px; font-size: 14px; font-family: inherit; font-weight: 300;
+  border-radius: var(--radius); border: 1px solid var(--border2);
+  background: var(--surface); color: var(--text); line-height: 1.5; outline: none;
+  transition: border-color 0.2s;
+}
+textarea:focus { border-color: var(--gold); }
+textarea::placeholder { color: var(--text3); }
+.send-btn {
+  padding: 0 18px; height: 44px; border-radius: var(--radius);
+  border: 1px solid var(--gold); background: transparent; color: var(--gold);
+  font-size: 14px; font-family: inherit; cursor: pointer; transition: all 0.2s;
+}
+.send-btn:hover { background: var(--gold); color: var(--bg); }
+.send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.quick { display: flex; gap: 6px; flex-wrap: wrap; }
+.qbtn {
+  font-size: 12px; color: var(--text2); background: transparent;
+  border: 1px solid var(--border); border-radius: 12px; padding: 4px 11px;
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.qbtn:hover { border-color: var(--gold); color: var(--gold); }
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-bg.show { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 16px; padding: 24px; width: 300px;
+}
+.modal h3 { font-family: 'Noto Serif SC',serif; font-size: 15px; color: var(--gold); margin-bottom: 16px; }
+.modal label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 6px; }
+.modal input[type=time] {
+  width: 100%; padding: 10px 12px; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: 8px;
+  color: var(--text); font-size: 14px; font-family: inherit; outline: none; margin-bottom: 12px;
+}
+.rem-status { font-size: 12px; color: var(--teal); min-height: 18px; margin-bottom: 12px; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+.m-cancel { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border2); background: transparent; color: var(--text2); font-size: 13px; cursor: pointer; font-family: inherit; }
+.m-save { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.m-save:hover { background: var(--gold); color: var(--bg); }
+.exp-area {
+  display: none; margin: 0 20px 10px; padding: 10px 12px;
+  background: var(--surface2); border-radius: var(--radius); border: 1px solid var(--border2);
+  font-size: 12px; color: var(--text2); white-space: pre-wrap; max-height: 160px; overflow-y: auto;
+}
 </style>
 </head>
 <body>
@@ -295,7 +149,7 @@
       <div class="header-sub">乔宝专属教练</div>
     </div>
   </div>
-  <button class="reminder-btn" onclick="openReminder()">设置每日提醒</button>
+  <button class="reminder-btn" onclick="openRem()">设置每日提醒</button>
 </div>
 
 <div class="tabs">
@@ -306,7 +160,7 @@
 <div class="mem-bar">
   <div class="mem-dot" id="mdot"></div>
   <span class="mem-txt" id="mtxt">开始对话后自动积累记忆</span>
-  <button class="export-btn" onclick="exportSnap()">导出快照</button>
+  <button class="exp-btn" onclick="exportSnap()">导出快照</button>
 </div>
 
 <div class="review-card" id="rcard">
@@ -315,7 +169,7 @@
 </div>
 
 <div class="chat" id="chat"></div>
-<div class="export-area" id="exp-area"></div>
+<div class="exp-area" id="exp-area"></div>
 
 <div class="input-area">
   <div class="input-row">
@@ -325,22 +179,21 @@
   </div>
   <div class="quick">
     <button class="qbtn" onclick="qs('帮我整理我的限制性信念和模式')">我的模式</button>
-    <button class="qbtn" onclick="qs('用10x框架评估我说过的事项')">10x清单</button>
+    <button class="qbtn" onclick="qs('用10x框架评估我提到的事项')">10x清单</button>
     <button class="qbtn" onclick="qs('给我一个具体的下一步行动')">下一步</button>
-    <button class="qbtn" onclick="qs('帮我做今天的财富复盘，想法感觉行动结果')">财富复盘</button>
+    <button class="qbtn" onclick="qs('帮我做今天的财富复盘')">财富复盘</button>
   </div>
 </div>
 
-<!-- Reminder modal -->
-<div class="modal-bg" id="modal-bg" onclick="closeReminder(event)">
+<div class="modal-bg" id="modal-bg" onclick="closeRem(event)">
   <div class="modal">
     <h3>每日复盘提醒</h3>
     <label>提醒时间</label>
-    <input type="time" id="reminder-time" value="21:00">
-    <div class="reminder-status" id="rem-status"></div>
+    <input type="time" id="rem-time" value="21:00">
+    <div class="rem-status" id="rem-status"></div>
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeReminder()">取消</button>
-      <button class="modal-save" onclick="saveReminder()">开启提醒</button>
+      <button class="m-cancel" onclick="closeRem()">取消</button>
+      <button class="m-save" onclick="saveRem()">开启提醒</button>
     </div>
   </div>
 </div>
@@ -357,20 +210,17 @@ const SYS = `你是"内在镜子"——乔宝（小小婷）的专属教练，�
 6. 最后给具体下一步，够难但够小
 
 【财富框架】
-- 想法→感觉→行动→结果
-- "不想输"思维 vs "想赢"思维
-- 10x靠取舍，2x靠努力
+想法→感觉→行动→结果；"不想输"思维 vs "想赢"思维；10x靠取舍，2x靠努力
 
 【原生家庭视角】
-乔宝受父亲影响深——父亲强势、刀子嘴豆腐心、希望她稳定。她的限制性信念（自我怀疑、"我不能输"、担心丢人）很多来自父亲的大脑暴君声音。当卡点出现，温柔地问：这个声音是你的，还是你父亲的？
+乔宝受父亲影响深——父亲强势、刀子嘴豆腐心、希望她稳定。她的限制性信念（自我怀疑、"我不能输"）很多来自父亲的大脑暴君声音。当卡点出现，温柔地问：这个声音是你的，还是你父亲的？
 
 【乔宝背景记忆】
 - 创业中，做过：销售/飞书系统/饭团生意/减脂产品/水晶/AI知识库/小红书电商
 - 最有成就感：帮人清货（解决别人困境）、把饭团从摆摊做到大学校园快速增长
-- 特质：百米冲刺型、策略型销售、爱研究商业底层逻辑、物欲极低（年花销约2万）
-- 卡点：自我怀疑、不知道卖什么、"不想输"思维、受父亲影响大
-- 目前在做：与合作方做小红书分润、探索AI知识库、探索小红书电商
-- 财务目标：年入10万就能正常运转，但内心想赢，想成为真正的创业者
+- 特质：百米冲刺型、策略型销售、爱研究商业底层逻辑、物欲极低
+- 卡点：自我怀疑、"不想输"思维、受父亲影响大
+- 目前：与合作方做小红书分润、探索AI知识库、探索小红书电商
 - 知妙的判断：超级大玩家，苹果树根扎实，果子快出来了
 
 【原则】不废话不鼓励，有锋芒接地气，每次只追一个问题，直击要害，不超过180字，末尾标注[层：想法/感觉/行动/结果/原生家庭/10x/身份]`;
@@ -387,36 +237,24 @@ const RQS = [
 
 let hist = [];
 let mode = 'pour';
-let reminderTimer = null;
+let remTimer = null;
 
-function loadData() {
+function load() {
   try {
-    const s = localStorage.getItem('inner_mirror_qiaobao');
-    if (s) {
-      const d = JSON.parse(s);
-      hist = d.hist || [];
-      updateMem();
-    }
+    const d = JSON.parse(localStorage.getItem('im_qiaobao') || '{}');
+    hist = d.hist || [];
+    updateMem();
   } catch(e) {}
 }
 
-function saveData() {
-  try {
-    localStorage.setItem('inner_mirror_qiaobao', JSON.stringify({ hist }));
-  } catch(e) {}
+function save() {
+  try { localStorage.setItem('im_qiaobao', JSON.stringify({ hist })); } catch(e) {}
 }
 
 function updateMem() {
-  const dot = document.getElementById('mdot');
-  const txt = document.getElementById('mtxt');
-  const rounds = Math.floor(hist.length / 2);
-  if (rounds > 0) {
-    dot.classList.add('active');
-    txt.textContent = `记忆运行中 · 累计 ${rounds} 轮对话`;
-  } else {
-    dot.classList.remove('active');
-    txt.textContent = '开始对话后自动积累记忆';
-  }
+  const n = Math.floor(hist.length / 2);
+  document.getElementById('mdot').classList.toggle('on', n > 0);
+  document.getElementById('mtxt').textContent = n > 0 ? `记忆运行中 · 累计 ${n} 轮对话` : '开始对话后自动积累记忆';
 }
 
 function switchMode(m) {
@@ -437,7 +275,6 @@ function switchMode(m) {
 function addMsg(role, text) {
   const chat = document.getElementById('chat');
   const d = document.createElement('div');
-
   if (role === 'ai') {
     const m = text.match(/\[层：([^\]]+)\]/);
     const clean = text.replace(/\[层：[^\]]+\]/, '').trim();
@@ -445,9 +282,9 @@ function addMsg(role, text) {
     d.textContent = clean;
     if (m) {
       const l = m[1];
-      const cls = l.includes('原生') ? 'b-root' : (l.includes('10x') || l.includes('身份')) ? 'b-biz' : 'b-inner';
+      const cls = l.includes('原生') ? 'b-r' : (l.includes('10x') || l.includes('身份')) ? 'b-b' : 'b-i';
       const wrap = document.createElement('div');
-      wrap.style.marginTop = '8px';
+      wrap.style.marginTop = '7px';
       const badge = document.createElement('span');
       badge.className = 'badge ' + cls;
       badge.textContent = l;
@@ -455,8 +292,8 @@ function addMsg(role, text) {
       d.appendChild(wrap);
     }
   } else if (role === 'typing') {
-    d.className = 'msg ai typing';
-    d.id = 'typing-indicator';
+    d.className = 'msg ai typing-dots';
+    d.id = 'typing';
     d.innerHTML = '<span></span><span></span><span></span>';
   } else if (role === 'sys') {
     d.className = 'msg sys';
@@ -465,33 +302,26 @@ function addMsg(role, text) {
     d.className = 'msg user';
     d.textContent = text;
   }
-
   chat.appendChild(d);
   chat.scrollTop = chat.scrollHeight;
-  return d;
 }
 
 function resize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
 }
 
 function onkey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
 }
 
-function qs(t) {
-  document.getElementById('inp').value = t;
-  send();
-}
+function qs(t) { document.getElementById('inp').value = t; send(); }
 
 async function send() {
   const inp = document.getElementById('inp');
   const text = inp.value.trim();
   if (!text) return;
-  inp.value = '';
-  inp.style.height = 'auto';
-
+  inp.value = ''; inp.style.height = 'auto';
   addMsg('user', text);
   hist.push({ role: 'user', content: text });
   if (hist.length > 60) hist = hist.slice(-60);
@@ -501,121 +331,78 @@ async function send() {
   addMsg('typing');
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYS,
-        messages: hist
-      })
+      body: JSON.stringify({ messages: hist, system: SYS })
     });
     const data = await res.json();
     const reply = data.content?.find(b => b.type === 'text')?.text || '出错了，请重试';
-
-    const ti = document.getElementById('typing-indicator');
-    if (ti) ti.remove();
-
+    document.getElementById('typing')?.remove();
     hist.push({ role: 'assistant', content: reply });
-    saveData();
-    updateMem();
+    save(); updateMem();
     addMsg('ai', reply);
   } catch(e) {
-    const ti = document.getElementById('typing-indicator');
-    if (ti) ti.remove();
-    addMsg('ai', '网络出了问题，请检查一下连接再试。');
+    document.getElementById('typing')?.remove();
+    addMsg('ai', '网络出了问题，请检查连接后重试。');
   }
-
   btn.disabled = false;
 }
 
 function exportSnap() {
-  const snap = {
-    导出时间: new Date().toLocaleString('zh-CN'),
-    对话轮数: Math.floor(hist.length / 2),
-    对话历史: hist.map(m => ({ 角色: m.role === 'user' ? '乔宝' : '教练', 内容: m.content }))
-  };
+  const snap = { 导出时间: new Date().toLocaleString('zh-CN'), 对话轮数: Math.floor(hist.length/2), 历史: hist.map(m => ({ 角色: m.role==='user'?'乔宝':'教练', 内容: m.content })) };
   const txt = JSON.stringify(snap, null, 2);
   const area = document.getElementById('exp-area');
-  area.textContent = txt;
   area.style.display = 'block';
-  navigator.clipboard?.writeText(txt).then(() => {
-    area.textContent = '已复制到剪贴板！\n\n' + txt;
-  });
+  navigator.clipboard?.writeText(txt).then(() => { area.textContent = '已复制！\n\n' + txt; }).catch(() => { area.textContent = txt; });
 }
 
-// Reminder
-function openReminder() {
-  const saved = localStorage.getItem('reminder_time');
-  if (saved) document.getElementById('reminder-time').value = saved;
-  const status = document.getElementById('rem-status');
-  status.textContent = saved ? `当前已设置提醒：${saved}` : '';
+function openRem() {
+  const saved = localStorage.getItem('rem_time');
+  if (saved) document.getElementById('rem-time').value = saved;
+  document.getElementById('rem-status').textContent = saved ? `当前提醒：${saved}` : '';
   document.getElementById('modal-bg').classList.add('show');
 }
 
-function closeReminder(e) {
-  if (!e || e.target === document.getElementById('modal-bg')) {
+function closeRem(e) {
+  if (!e || e.target === document.getElementById('modal-bg'))
     document.getElementById('modal-bg').classList.remove('show');
-  }
 }
 
-function saveReminder() {
-  const time = document.getElementById('reminder-time').value;
+function saveRem() {
+  const time = document.getElementById('rem-time').value;
   if (!time) return;
-  localStorage.setItem('reminder_time', time);
-
-  if (Notification.permission === 'denied') {
-    document.getElementById('rem-status').textContent = '请在浏览器设置中允许通知权限';
-    return;
-  }
-  if (Notification.permission !== 'granted') {
-    Notification.requestPermission().then(p => {
-      if (p === 'granted') {
-        scheduleReminder(time);
-        document.getElementById('rem-status').textContent = `已开启 · 每天 ${time} 提醒复盘`;
-        setTimeout(closeReminder, 1500);
-      } else {
-        document.getElementById('rem-status').textContent = '需要允许通知权限才能提醒';
-      }
-    });
+  localStorage.setItem('rem_time', time);
+  if (Notification.permission === 'granted') {
+    scheduleRem(time);
+    document.getElementById('rem-status').textContent = `已开启 · 每天 ${time} 提醒`;
+    setTimeout(closeRem, 1500);
   } else {
-    scheduleReminder(time);
-    document.getElementById('rem-status').textContent = `已开启 · 每天 ${time} 提醒复盘`;
-    setTimeout(closeReminder, 1500);
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') { scheduleRem(time); document.getElementById('rem-status').textContent = `已开启 · 每天 ${time} 提醒`; setTimeout(closeRem, 1500); }
+      else document.getElementById('rem-status').textContent = '请允许浏览器通知权限';
+    });
   }
 }
 
-function scheduleReminder(timeStr) {
-  if (reminderTimer) clearInterval(reminderTimer);
-  reminderTimer = setInterval(() => {
+function scheduleRem(timeStr) {
+  if (remTimer) clearInterval(remTimer);
+  remTimer = setInterval(() => {
     const now = new Date();
     const cur = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    if (cur === timeStr && Notification.permission === 'granted') {
-      new Notification('内在镜子 · 每日复盘', {
-        body: '乔宝，今天的复盘时间到了。花5分钟看见自己。',
-        icon: ''
-      });
-    }
+    if (cur === timeStr) new Notification('内在镜子 · 复盘时间', { body: '乔宝，今天的复盘时间到了。花5分钟看见自己。' });
   }, 60000);
 }
 
-function initReminder() {
-  const saved = localStorage.getItem('reminder_time');
-  if (saved && Notification.permission === 'granted') {
-    scheduleReminder(saved);
-  }
-}
-
-// Init
-loadData();
-initReminder();
+load();
+const saved = localStorage.getItem('rem_time');
+if (saved && Notification.permission === 'granted') scheduleRem(saved);
 
 if (hist.length === 0) {
   addMsg('ai', '乔宝，我在。\n\n脑子里现在转着什么？一个决定、一个卡点、还是一个情绪——直接倒出来。\n\n不用整理，第一反应就说。');
 } else {
   addMsg('sys', '—— 欢迎回来，记忆已加载 ——');
-  addMsg('ai', `上次我们已经聊了 ${Math.floor(hist.length/2)} 轮。\n\n今天什么在脑子里？`);
+  addMsg('ai', `上次已聊了 ${Math.floor(hist.length/2)} 轮。今天什么在脑子里？`);
 }
 </script>
 </body>
